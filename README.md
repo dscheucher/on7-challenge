@@ -12,17 +12,9 @@ docker compose run --rm migrate npm run db:seed
 
 Öffnen: [localhost:4173/jobs](http://localhost:4173/jobs). Compose wartet auf PostgreSQL, spielt die generierten Migrationen ein und startet danach die Anwendung. `docker compose down` stoppt die Dienste; Daten bleiben im Volume erhalten.
 
-Die optionalen Demo-Konten `lea@beispiel.de` und `tom@beispiel.de` verwenden beide `JobboardDemo2026!`. Seeding überschreibt keine vorhandenen Konten oder Stellen. Keine E-Mail-Verifikation, kein Mailserver. Öffentliche Selbstregistrierung ist deaktiviert.
+Recruiter registrieren sich unter [localhost:4173/register](http://localhost:4173/register), erreichbar über „Registrieren“ auf der Login-Seite. Nach der Registrierung sind sie sofort angemeldet, ohne E-Mail-Verifikation und ohne Mailserver. Name, E-Mail-Adresse und ein Passwort mit 8 bis 128 Zeichen sind erforderlich.
 
-Eigenes Recruiter-Konto anlegen:
-
-```sh
-export RECRUITER_PASSWORD='ein-eigenes-langes-passwort'
-docker compose run --rm -e RECRUITER_PASSWORD migrate npm run recruiter:create -- recruiter@example.com 'Recruiter Name'
-unset RECRUITER_PASSWORD
-```
-
-Das Konto ist sofort nutzbar. Vorhandene Konten werden nicht verändert.
+Die optionalen Demo-Konten `lea@beispiel.de` und `tom@beispiel.de` verwenden beide `JobboardDemo2026!`. Seeding überschreibt keine vorhandenen Konten oder Stellen; die Konto-Hilfsfunktion dient ausschließlich Demodaten und Test-Fixtures.
 
 Standardports: App 4173, PostgreSQL 55434. Änderungen über `APP_PORT` und `POSTGRES_PORT` in `.env`, danach neu bauen. Die App wird unter `/` betrieben. SvelteKit 3 benötigt die kanonische Origin beim Build: `PUBLIC_ORIGIN` bzw. Docker-Build-Argument `APP_ORIGIN`. Compose setzt sie passend zum App-Port. Für externen Betrieb eine eigene Origin und ein eigenes `BETTER_AUTH_SECRET` konfigurieren; die Compose-Vorgaben dienen ausschließlich lokaler Entwicklung.
 
@@ -53,6 +45,8 @@ npm run dev
 - Stellen sortieren nach letzter Änderung, Bewerbungen nach Eingangszeit, jeweils absteigend.
 
 Der Fetch-Adapter läuft unter `/api/trpc/[...trpc]`. SvelteKit-Loads und Form-Actions verwenden denselben Router über `createCaller` ohne HTTP-Umweg. Form-Actions übersetzen Ergebnisse in Formularzustände und funktionieren auch ohne JavaScript. `src/lib/trpc.ts` stellt zusätzlich den typisierten HTTP-Client bereit. Better Auth verwendet seine eigenen `/api/auth/*`-Endpunkte.
+
+Stellenbeschreibungen verwenden Leerzeilen für Absätze. Optionale Überschriften werden explizit mit `## ` am Zeilenanfang markiert. Normale Zeilenumbrüche erzeugen keine Überschrift; dieselbe Darstellung gilt unabhängig vom Stellentitel. HTML wird als Text ausgegeben.
 
 ## Migrationen
 

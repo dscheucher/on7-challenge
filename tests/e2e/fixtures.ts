@@ -66,6 +66,16 @@ test.afterAll(async () => {
 	await pool.end();
 });
 export { expect };
+export async function registeredRecruiter(email: string) {
+	const [result] = await db
+		.select({ id: user.id, emailVerified: user.emailVerified })
+		.from(user)
+		.where(eq(user.email, email));
+	return result;
+}
+export async function removeRegisteredRecruiter(email: string) {
+	await db.delete(user).where(eq(user.email, email));
+}
 export async function login(page: Page, fixture: Fixture) {
 	await page.goto('/login');
 	await page.getByLabel('E-Mail-Adresse').fill(fixture.email);

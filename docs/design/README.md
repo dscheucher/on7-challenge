@@ -20,6 +20,8 @@
 | dFIb2  | Bewerbungen, Mobile           | 390 × 1203  |
 | NUCE2  | Bearbeiten, Mobile            | 390 × 1060  |
 
+Die ergänzten Frames `x01tjB` (17 · Recruiter-Registrierung / Desktop, 1440 × 1000) und `z53h4` (18 · Recruiter-Registrierung / Mobile, 390 × 844) verwenden dieselbe Login-Karte: 440 px auf Desktop bzw. 350 px auf Mobile, 36/24 px Innenabstand, 24 px Abstand zwischen Feldern, 48 px hohe Eingaben und Hauptaktion. Login und Registrierung sind gegenseitig verlinkt.
+
 Die `jb-*`-Variablen aus Pencil stehen in `src/lib/styles/tokens.css`. Manrope wird lokal ausgeliefert; Icons verwenden dieselbe Lucide-Familie wie Pencil. Buttons, Badges, Felder, Hinweise, Karten und Navigation sind gemeinsame Komponenten.
 
 Die Anwendung verwendet im Listeneintrag den Anfang der gespeicherten Beschreibung. Die Pencil-Vorlage enthält dafür teilweise abweichende Beispieltexte. Der Abgleich erfolgt manuell; automatische Bildvergleiche sind auf Wunsch nicht Bestandteil der Tests.

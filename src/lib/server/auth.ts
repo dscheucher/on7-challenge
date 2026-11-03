@@ -12,7 +12,13 @@ function createAuth() {
 		baseURL: process.env.BETTER_AUTH_URL ?? 'http://localhost:4173',
 		secret: process.env.BETTER_AUTH_SECRET,
 		database: drizzleAdapter(db, { provider: 'pg', schema }),
-		emailAndPassword: { enabled: true, requireEmailVerification: false, disableSignUp: true },
+		emailAndPassword: {
+			enabled: true,
+			requireEmailVerification: false,
+			autoSignIn: true,
+			minPasswordLength: 8,
+			maxPasswordLength: 128
+		},
 		plugins: [sveltekitCookies(getRequestEvent)]
 	});
 }

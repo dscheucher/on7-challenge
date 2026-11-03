@@ -2039,6 +2039,39 @@
                       "fill": "$jb-white"
                     }
                   }
+                },
+                {
+                  "type": "frame",
+                  "id": "eMADZ",
+                  "name": "Konto wechseln",
+                  "width": "fill_container",
+                  "gap": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "DfmLf",
+                      "name": "Kontohinweis",
+                      "fill": "$jb-muted",
+                      "content": "Noch kein Konto?",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$jb-font",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "kzAbb",
+                      "name": "Kontolink",
+                      "fill": "$jb-blue",
+                      "content": "Registrieren",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$jb-font",
+                      "fontSize": 13,
+                      "fontWeight": "700"
+                    }
+                  ]
                 }
               ]
             },
@@ -6285,6 +6318,39 @@
                       "fill": "$jb-white"
                     }
                   }
+                },
+                {
+                  "type": "frame",
+                  "id": "Be7F1",
+                  "name": "Konto wechseln",
+                  "width": "fill_container",
+                  "gap": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "skgBw",
+                      "name": "Kontohinweis",
+                      "fill": "$jb-muted",
+                      "content": "Noch kein Konto?",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$jb-font",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Oewcb",
+                      "name": "Kontolink",
+                      "fill": "$jb-blue",
+                      "content": "Registrieren",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$jb-font",
+                      "fontSize": 13,
+                      "fontWeight": "700"
+                    }
+                  ]
                 }
               ]
             },
@@ -8806,6 +8872,571 @@
               "fontFamily": "$jb-font",
               "fontSize": 12,
               "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "x01tjB",
+      "x": 4800,
+      "y": 1346,
+      "name": "17 · Recruiter-Registrierung / Desktop",
+      "clip": true,
+      "width": 1440,
+      "height": 1000,
+      "fill": "$jb-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "afQgz",
+          "type": "ref",
+          "ref": "e7CM4",
+          "name": "Öffentliche Navigation",
+          "width": "fill_container",
+          "padding": [
+            0,
+            120
+          ],
+          "descendants": {
+            "xKe0w": {
+              "enabled": false
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "d9le4q",
+          "name": "Loginbereich",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 24,
+          "padding": [
+            56,
+            0
+          ],
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "RDtrQ",
+              "name": "Loginformular",
+              "width": 440,
+              "fill": "$jb-white",
+              "cornerRadius": 12,
+              "stroke": "$jb-line",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "gap": 24,
+              "padding": 36,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "YxorO",
+                  "name": "Willkommen",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "r4QMK",
+                      "name": "Recruiter-Login",
+                      "fill": "$jb-ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Recruiter-Registrierung",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$jb-font",
+                      "fontSize": 30,
+                      "fontWeight": "800",
+                      "letterSpacing": -1
+                    },
+                    {
+                      "type": "text",
+                      "id": "qvvcr",
+                      "name": "Verwalte deine Stellen und Bewerbungen.",
+                      "fill": "$jb-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Erstelle ein Konto und verwalte deine Stellen.",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$jb-font",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "id": "fmyNk",
+                  "type": "ref",
+                  "ref": "My8Ka",
+                  "name": "Feld / Name",
+                  "width": "fill_container",
+                  "descendants": {
+                    "foKOD": {
+                      "content": "Name"
+                    },
+                    "U2Y5H": {
+                      "content": "Vor- und Nachname",
+                      "fill": "#63738B"
+                    }
+                  }
+                },
+                {
+                  "id": "v76wdQ",
+                  "type": "ref",
+                  "ref": "My8Ka",
+                  "name": "Feld / E-Mail-Adresse",
+                  "width": "fill_container",
+                  "descendants": {
+                    "foKOD": {
+                      "content": "E-Mail-Adresse"
+                    },
+                    "JdfIS": {
+                      "height": 48,
+                      "padding": [
+                        0,
+                        14
+                      ],
+                      "alignItems": "center",
+                      "stroke": "$jb-line",
+                      "strokeWidth": 1
+                    },
+                    "U2Y5H": {
+                      "content": "name@beispiel.de",
+                      "fill": "#63738B"
+                    }
+                  }
+                },
+                {
+                  "type": "frame",
+                  "id": "W8VOnM",
+                  "name": "Passwortfeld",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "faeBC",
+                      "name": "Passwort",
+                      "fill": "$jb-ink",
+                      "content": "Passwort",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$jb-font",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "P4x2Cw",
+                      "name": "Passwort anzeigen",
+                      "width": "fill_container",
+                      "height": 48,
+                      "fill": "$jb-white",
+                      "cornerRadius": 8,
+                      "stroke": "$jb-line",
+                      "strokeWidth": 1,
+                      "padding": [
+                        0,
+                        14
+                      ],
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "rue9j",
+                          "name": "••••••••••••",
+                          "fill": "$jb-ink",
+                          "content": "••••••••••••",
+                          "lineHeight": 1.5,
+                          "fontFamily": "$jb-font",
+                          "fontSize": 16,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "DKfTo",
+                          "name": "eye",
+                          "width": 20,
+                          "height": 20,
+                          "icon": "eye",
+                          "library": "lucide",
+                          "fill": "$jb-muted"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "pC1zt",
+                  "type": "ref",
+                  "ref": "j76VsR",
+                  "name": "Button / Anmelden",
+                  "fill": "$jb-blue",
+                  "stroke": "#00000000",
+                  "strokeWidth": 1,
+                  "width": "fill_container",
+                  "height": 48,
+                  "descendants": {
+                    "SnG15": {
+                      "content": "Konto erstellen",
+                      "fill": "$jb-white"
+                    }
+                  }
+                },
+                {
+                  "type": "frame",
+                  "id": "YUwdl",
+                  "name": "Konto wechseln",
+                  "width": "fill_container",
+                  "gap": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "PezcG",
+                      "name": "Kontohinweis",
+                      "fill": "$jb-muted",
+                      "content": "Schon ein Konto?",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$jb-font",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "wfSdH",
+                      "name": "Kontolink",
+                      "fill": "$jb-blue",
+                      "content": "Anmelden",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$jb-font",
+                      "fontSize": 13,
+                      "fontWeight": "700"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "xm3WB",
+              "name": "Zur öffentlichen Stellenübersicht",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "eP8mT",
+                  "name": "arrow-left",
+                  "width": 16,
+                  "height": 16,
+                  "icon": "arrow-left",
+                  "library": "lucide",
+                  "fill": "$jb-muted"
+                },
+                {
+                  "type": "text",
+                  "id": "nYoQq",
+                  "name": "Zur öffentlichen Stellenübersicht",
+                  "fill": "$jb-muted",
+                  "content": "Zur öffentlichen Stellenübersicht",
+                  "lineHeight": 1.5,
+                  "fontFamily": "$jb-font",
+                  "fontSize": 13,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "z53h4",
+      "x": 4850,
+      "y": 4046,
+      "name": "18 · Recruiter-Registrierung / Mobile",
+      "clip": true,
+      "width": 390,
+      "height": 844,
+      "fill": "$jb-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "mmgQW",
+          "type": "ref",
+          "ref": "e7CM4",
+          "name": "Öffentliche Navigation",
+          "width": "fill_container",
+          "padding": [
+            0,
+            20
+          ],
+          "height": 72,
+          "descendants": {
+            "xKe0w": {
+              "enabled": false
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "r8UqA",
+          "name": "Mobile Anmeldung",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 24,
+          "padding": [
+            48,
+            20,
+            32,
+            20
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "br6ls",
+              "name": "Mobiles Loginformular",
+              "width": "fill_container",
+              "fill": "$jb-white",
+              "cornerRadius": 12,
+              "stroke": "$jb-line",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "gap": 24,
+              "padding": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "pX8bl",
+                  "name": "Willkommen",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Cawby",
+                      "name": "Recruiter-Login",
+                      "fill": "$jb-ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Recruiter-Registrierung",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$jb-font",
+                      "fontSize": 26,
+                      "fontWeight": "800",
+                      "letterSpacing": -0.7
+                    },
+                    {
+                      "type": "text",
+                      "id": "XHf83",
+                      "name": "Verwalte deine Stellen und Bewerbungen.",
+                      "fill": "$jb-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Erstelle ein Konto und verwalte deine Stellen.",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$jb-font",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "id": "W45JZ",
+                  "type": "ref",
+                  "ref": "My8Ka",
+                  "name": "Feld / Name",
+                  "width": "fill_container",
+                  "descendants": {
+                    "foKOD": {
+                      "content": "Name"
+                    },
+                    "U2Y5H": {
+                      "content": "Vor- und Nachname",
+                      "fill": "#63738B"
+                    }
+                  }
+                },
+                {
+                  "id": "slWcc",
+                  "type": "ref",
+                  "ref": "My8Ka",
+                  "name": "Feld / E-Mail-Adresse",
+                  "width": "fill_container",
+                  "descendants": {
+                    "foKOD": {
+                      "content": "E-Mail-Adresse"
+                    },
+                    "JdfIS": {
+                      "height": 48,
+                      "padding": [
+                        0,
+                        14
+                      ],
+                      "alignItems": "center",
+                      "stroke": "$jb-line",
+                      "strokeWidth": 1
+                    },
+                    "U2Y5H": {
+                      "content": "name@beispiel.de",
+                      "fill": "#63738B"
+                    }
+                  }
+                },
+                {
+                  "type": "frame",
+                  "id": "JeM4s",
+                  "name": "Passwortfeld",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "q6bcWw",
+                      "name": "Passwort",
+                      "fill": "$jb-ink",
+                      "content": "Passwort",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$jb-font",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "kzZYt",
+                      "name": "Passwort anzeigen",
+                      "width": "fill_container",
+                      "height": 48,
+                      "fill": "$jb-white",
+                      "cornerRadius": 8,
+                      "stroke": "$jb-line",
+                      "strokeWidth": 1,
+                      "padding": [
+                        0,
+                        14
+                      ],
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ULHaT",
+                          "name": "••••••••••••",
+                          "fill": "$jb-ink",
+                          "content": "••••••••••••",
+                          "lineHeight": 1.5,
+                          "fontFamily": "$jb-font",
+                          "fontSize": 16,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "O0OKC",
+                          "name": "eye",
+                          "width": 20,
+                          "height": 20,
+                          "icon": "eye",
+                          "library": "lucide",
+                          "fill": "$jb-muted"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "ebwff",
+                  "type": "ref",
+                  "ref": "j76VsR",
+                  "name": "Button / Anmelden",
+                  "fill": "$jb-blue",
+                  "stroke": "#00000000",
+                  "strokeWidth": 1,
+                  "width": "fill_container",
+                  "height": 48,
+                  "descendants": {
+                    "SnG15": {
+                      "content": "Konto erstellen",
+                      "fill": "$jb-white"
+                    }
+                  }
+                },
+                {
+                  "type": "frame",
+                  "id": "v0PPLh",
+                  "name": "Konto wechseln",
+                  "width": "fill_container",
+                  "gap": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "LBeof",
+                      "name": "Kontohinweis",
+                      "fill": "$jb-muted",
+                      "content": "Schon ein Konto?",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$jb-font",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "dwsqX",
+                      "name": "Kontolink",
+                      "fill": "$jb-blue",
+                      "content": "Anmelden",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$jb-font",
+                      "fontSize": 13,
+                      "fontWeight": "700"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "m49uj4",
+              "name": "Zur Stellenübersicht",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "PXzin",
+                  "name": "arrow-left",
+                  "width": 16,
+                  "height": 16,
+                  "icon": "arrow-left",
+                  "library": "lucide",
+                  "fill": "$jb-muted"
+                },
+                {
+                  "type": "text",
+                  "id": "bRy4Q",
+                  "name": "Zur Stellenübersicht",
+                  "fill": "$jb-muted",
+                  "content": "Zur Stellenübersicht",
+                  "lineHeight": 1.5,
+                  "fontFamily": "$jb-font",
+                  "fontSize": 13,
+                  "fontWeight": "600"
+                }
+              ]
             }
           ]
         }

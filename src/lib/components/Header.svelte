@@ -5,7 +5,7 @@
 	import Button from './Button.svelte';
 	let { user }: { user: { name: string; email: string } | null } = $props();
 	const recruiter = $derived(page.url.pathname.startsWith('/recruiter'));
-	const login = $derived(page.url.pathname === '/login');
+	const login = $derived(['/login', '/register'].includes(page.url.pathname));
 </script>
 
 <header class="site-header" class:recruiter-header={recruiter}>

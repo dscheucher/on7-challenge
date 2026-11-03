@@ -61,6 +61,7 @@
 		error={errors?.description}
 		maxlength={20000}
 	/>
+	<p class="description-help">Leerzeilen trennen Absätze. Optional: ## Überschrift</p>
 	<fieldset class="status-field">
 		<legend>Status</legend>
 		<div class="status-options">

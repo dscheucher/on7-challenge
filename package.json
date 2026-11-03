@@ -19,7 +19,6 @@
 		"db:generate": "node --env-file-if-exists=.env node_modules/drizzle-kit/bin.cjs generate",
 		"db:migrate": "node --env-file-if-exists=.env node_modules/drizzle-kit/bin.cjs migrate",
 		"db:seed": "node --env-file-if-exists=.env --import tsx scripts/seed.ts",
-		"recruiter:create": "node --env-file-if-exists=.env --import tsx scripts/create-recruiter.ts",
 		"test:integration": "node --env-file-if-exists=.env --import tsx --test tests/integration/*.test.ts",
 		"test:e2e": "playwright test"
 	},

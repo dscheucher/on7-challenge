@@ -1,4 +1,12 @@
-import { test, expect, login, fillApplication } from './fixtures.ts';
+import {
+	test,
+	expect,
+	login,
+	fillApplication,
+	registeredRecruiter,
+	removeRegisteredRecruiter
+} from './fixtures.ts';
+import { randomUUID } from 'node:crypto';
 
 test('public list shows open jobs, hides closed jobs, and opens details', async ({
 	page,
@@ -234,4 +242,111 @@ test('a failed request keeps form input and can be retried', async ({ page, fixt
 	await page.unrouteAll({ behavior: 'wait' });
 	await page.getByRole('button', { name: 'Erneut senden' }).click();
 	await expect(page.getByRole('status')).toContainText('Deine Bewerbung wurde übermittelt.');
+});
+
+test('register through the login page without verification and stay signed in', async ({
+	page
+}) => {
+	const email = `registration-${randomUUID()}@example.test`;
+	const password = 'RegistrationTest2026!';
+	try {
+		await page.goto('/login');
+		await page.getByRole('link', { name: 'Registrieren', exact: true }).click();
+		await expect(page).toHaveURL('/register');
+		await page.getByLabel('Name', { exact: true }).fill('Neue Recruiterin');
+		await page.getByLabel('E-Mail-Adresse').fill(email.toUpperCase());
+		await page.getByLabel('Passwort', { exact: true }).fill(password);
+		await page.getByRole('button', { name: 'Passwort anzeigen' }).click();
+		await expect(page.getByLabel('Passwort', { exact: true })).toHaveAttribute('type', 'text');
+		await page.getByRole('button', { name: 'Konto erstellen', exact: true }).click();
+		await expect(page).toHaveURL('/recruiter/jobs');
+		await expect(page.getByRole('heading', { name: 'Noch keine eigenen Stellen' })).toBeVisible();
+		expect((await registeredRecruiter(email))?.emailVerified).toBe(false);
+		await page.reload();
+		await expect(page.getByRole('heading', { name: 'Meine Stellen', exact: true })).toBeVisible();
+		await page.goto('/register');
+		await expect(page).toHaveURL('/recruiter/jobs');
+		await page.getByRole('link', { name: 'Neue Stelle', exact: true }).click();
+		await expect(page.getByRole('heading', { name: 'Neue Stelle', exact: true })).toBeVisible();
+		await page.getByRole('button', { name: 'Abmelden' }).click();
+		await page.getByLabel('E-Mail-Adresse').fill(email);
+		await page.getByLabel('Passwort', { exact: true }).fill(password);
+		await page.getByRole('button', { name: 'Anmelden', exact: true }).click();
+		await expect(page).toHaveURL('/recruiter/jobs');
+	} finally {
+		await removeRegisteredRecruiter(email);
+	}
+});
+
+test('registration validates fields on the server and never echoes passwords', async ({ page }) => {
+	await page.goto('/register');
+	await page.getByLabel('E-Mail-Adresse').fill('invalid@');
+	await page.getByLabel('Passwort', { exact: true }).fill('short');
+	const result = page.waitForResponse(
+		(response) =>
+			response.request().method() === 'POST' && new URL(response.url()).pathname === '/register'
+	);
+	await page.getByRole('button', { name: 'Konto erstellen', exact: true }).click();
+	expect(await (await result).text()).not.toContain('short');
+	await expect(page.getByText('Bitte gib deinen Namen ein.')).toBeVisible();
+	await expect(page.getByText('Bitte gib eine gültige E-Mail-Adresse ein.')).toBeVisible();
+	await expect(page.getByText('Das Passwort muss mindestens 8 Zeichen lang sein.')).toBeVisible();
+	await expect(page.getByLabel('E-Mail-Adresse')).toHaveValue('invalid@');
+	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test('registration rejects duplicate accounts and keeps the existing password', async ({
+	page,
+	fixture
+}) => {
+	await page.goto('/register');
+	await page.getByLabel('Name', { exact: true }).fill('Doppeltes Konto');
+	await page.getByLabel('E-Mail-Adresse').fill(fixture.email.toUpperCase());
+	await page.getByLabel('Passwort', { exact: true }).fill('DifferentPassword2026!');
+	await page.getByRole('button', { name: 'Konto erstellen', exact: true }).click();
+	await expect(page.getByRole('alert')).toContainText('bereits ein Konto');
+	await expect(page.getByLabel('Name', { exact: true })).toHaveValue('Doppeltes Konto');
+	await page.getByRole('link', { name: 'Anmelden', exact: true }).click();
+	await login(page, fixture);
+});
+
+test('registration also works without client-side JavaScript', async ({ browser, baseURL }) => {
+	const email = `registration-native-${randomUUID()}@example.test`;
+	const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
+	try {
+		const page = await context.newPage();
+		await page.goto('/register');
+		await page.getByLabel('Name', { exact: true }).fill('Native Recruiter');
+		await page.getByLabel('E-Mail-Adresse').fill(email);
+		await page.getByLabel('Passwort', { exact: true }).fill('RegistrationTest2026!');
+		await page.getByRole('button', { name: 'Konto erstellen', exact: true }).click();
+		await expect(page).toHaveURL('/recruiter/jobs');
+		expect((await registeredRecruiter(email))?.emailVerified).toBe(false);
+	} finally {
+		await context.close();
+		await removeRegisteredRecruiter(email);
+	}
+});
+
+test('description formatting uses explicit headings for every job title', async ({
+	page,
+	fixture
+}) => {
+	await fixture.board.updateJob(fixture.ownerId, fixture.job.id, {
+		title: 'Platform Engineer',
+		status: 'open',
+		description:
+			'Erste Zeile\nZweite Zeile\n\n## Deine Aufgaben\nZuverlässige Dienste entwickeln.\n\n<script>window.__jobboardXss=true</script>'
+	});
+	await page.goto(`/jobs/${fixture.job.id}`);
+	await expect(page.getByRole('heading', { name: 'Platform Engineer', level: 1 })).toBeVisible();
+	await expect(page.locator('.description-paragraph').first()).toHaveText(
+		'Erste Zeile\nZweite Zeile'
+	);
+	await expect(page.getByRole('heading', { name: 'Erste Zeile' })).toHaveCount(0);
+	await expect(page.getByRole('heading', { name: 'Deine Aufgaben', level: 2 })).toBeVisible();
+	await expect(
+		page.getByText('<script>window.__jobboardXss=true</script>', { exact: true })
+	).toBeVisible();
+	expect(await page.evaluate(() => Reflect.has(window, '__jobboardXss'))).toBe(false);
 });

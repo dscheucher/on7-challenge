@@ -1284,3 +1284,27 @@ select:focus {
 		line-height: 18px;
 	}
 }
+
+.auth-switch {
+	display: flex;
+	justify-content: center;
+	gap: 6px;
+	color: var(--color-muted);
+	font-size: 13px;
+	line-height: 20px;
+}
+.auth-switch a {
+	color: var(--color-primary);
+	font-weight: 700;
+}
+.description-help {
+	margin-top: -12px;
+	font-size: 12px;
+	line-height: 18px;
+	color: var(--color-muted);
+}
+@media (max-width: 767px) {
+	.mobile-login-back {
+		align-self: stretch;
+	}
+}

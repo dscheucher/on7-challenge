@@ -4,7 +4,7 @@ import { createRecruiter } from './accounts.ts';
 
 export const demoJobId = '10000000-0000-4000-8000-000000000001';
 export const frontendDescription =
-	'Du möchtest digitale Produkte entwickeln, die Menschen gerne nutzen? Bei uns arbeitest du an verständlichen Oberflächen – von der ersten Idee bis zum letzten Detail.\n\nDeine Aufgaben\nDu entwickelst moderne Weboberflächen und setzt Designs gemeinsam mit unserem Produktteam um. Dabei achtest du auf gute Bedienbarkeit, sauberen Code und verlässliche Tests.\n\nDas bringst du mit\nErfahrung mit JavaScript oder TypeScript und einem modernen Frontend-Framework. Du arbeitest eigenständig, stellst Fragen und teilst dein Wissen gerne im Team.\n\nDas erwartet dich\nEin kleines Team mit kurzen Entscheidungswegen, Raum für eigene Ideen und eine Arbeitsweise, in der Qualität und Zusammenarbeit zählen.';
+	'Du möchtest digitale Produkte entwickeln, die Menschen gerne nutzen? Bei uns arbeitest du an verständlichen Oberflächen – von der ersten Idee bis zum letzten Detail.\n\n## Deine Aufgaben\nDu entwickelst moderne Weboberflächen und setzt Designs gemeinsam mit unserem Produktteam um. Dabei achtest du auf gute Bedienbarkeit, sauberen Code und verlässliche Tests.\n\n## Das bringst du mit\nErfahrung mit JavaScript oder TypeScript und einem modernen Frontend-Framework. Du arbeitest eigenständig, stellst Fragen und teilst dein Wissen gerne im Team.\n\n## Das erwartet dich\nEin kleines Team mit kurzen Entscheidungswegen, Raum für eigene Ideen und eine Arbeitsweise, in der Qualität und Zusammenarbeit zählen.';
 try {
 	const lea = await createRecruiter(db, {
 		email: 'lea@beispiel.de',

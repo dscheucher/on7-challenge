@@ -33,6 +33,19 @@ export const loginInput = z.object({
 	email: z.string().trim().toLowerCase().email(),
 	password: z.string().min(1).max(128)
 });
+export const registrationInput = z.object({
+	name: z.string().trim().min(1, 'Bitte gib deinen Namen ein.').max(120, 'Der Name ist zu lang.'),
+	email: z
+		.string()
+		.trim()
+		.toLowerCase()
+		.max(254, 'Die E-Mail-Adresse ist zu lang.')
+		.email('Bitte gib eine gültige E-Mail-Adresse ein.'),
+	password: z
+		.string()
+		.min(8, 'Das Passwort muss mindestens 8 Zeichen lang sein.')
+		.max(128, 'Das Passwort darf höchstens 128 Zeichen lang sein.')
+});
 export function fieldErrors(error: z.ZodError) {
 	return Object.fromEntries(error.issues.map((issue) => [issue.path[0], issue.message]));
 }

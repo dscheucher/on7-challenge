@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { Eye, EyeOff } from '@lucide/svelte';
+	import PasswordField from '#lib/components/PasswordField.svelte';
 	import Field from '#lib/components/Field.svelte';
 	import Notice from '#lib/components/Notice.svelte';
 	import BackLink from '#lib/components/BackLink.svelte';
 	import type { PageProps } from './$types';
 	let { form }: PageProps = $props();
-	let showPassword = $state(false),
-		pending = $state(false),
+	let pending = $state(false),
 		networkError = $state(false);
 </script>
 
@@ -49,27 +48,11 @@
 			value={form?.email ?? ''}
 			autocomplete="username"
 		/>
-		<div class="field">
-			<label for="password">Passwort</label>
-			<div class="password-control">
-				<input
-					id="password"
-					name="password"
-					type={showPassword ? 'text' : 'password'}
-					autocomplete="current-password"
-					required
-					maxlength={128}
-				/><button
-					type="button"
-					aria-label={showPassword ? 'Passwort verbergen' : 'Passwort anzeigen'}
-					onclick={() => (showPassword = !showPassword)}
-					>{#if showPassword}<EyeOff size={20} />{:else}<Eye size={20} />{/if}</button
-				>
-			</div>
-		</div>
+		<PasswordField />
 		<button type="submit" class="button primary full submit-button" disabled={pending}
 			>{pending ? 'Wird angemeldet …' : 'Anmelden'}</button
 		>
+		<p class="auth-switch">Noch kein Konto? <a href="/register">Registrieren</a></p>
 	</form>
 	<div class="desktop-login-back">
 		<BackLink href="/jobs" label="Zur öffentlichen Stellenübersicht" />

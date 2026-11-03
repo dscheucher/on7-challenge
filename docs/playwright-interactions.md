@@ -17,6 +17,14 @@ Diese Abläufe sind in `tests/e2e/jobboard.spec.ts` für Desktop (1440 px) und M
 | 11  | Leere Bewerbungsliste und zentrale Seiten auf Mobile öffnen                                | Klarer Leerzustand; kein horizontales Scrollen.                                                                                           |
 | 12  | Netzwerk beim Absenden unterbrechen und erneut versuchen                                   | Fehlerhinweis, Inhalte bleiben erhalten; erneutes Senden gelingt.                                                                         |
 
+Weitere implementierte Abläufe:
+
+- Registrierung über den Link auf der Login-Seite: direkt angemeldet, keine E-Mail-Verifikation, Session nach Neuladen erhalten, Logout und erneuter Login möglich.
+- Registrierung mit fehlendem Namen, ungültiger E-Mail und zu kurzem Passwort: serverseitige Feldfehler, kein Passwort in der Formularantwort.
+- Doppelte Registrierung mit anderer Großschreibung der E-Mail: vorhandenes Konto und Passwort bleiben unverändert.
+- Registrierung ohne clientseitiges JavaScript.
+- Stellenbeschreibung unter beliebigem Titel: normale Zeilenumbrüche bleiben Text, nur explizite `## `-Zeilen werden Überschriften; HTML wird nicht ausgeführt.
+
 Zusätzlich prüft `tests/integration/jobboard.test.ts` Nebenläufigkeit, Eigentümerschaft, Validierung und Datenbank-Constraints gegen PostgreSQL.
 
 ```sh
