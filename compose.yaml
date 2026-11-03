@@ -1,0 +1,56 @@
+name: on7-challenge
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: jobboard
+      POSTGRES_PASSWORD: local-development-only
+      POSTGRES_DB: jobboard
+    ports:
+      - '127.0.0.1:${POSTGRES_PORT:-55434}:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U jobboard -d jobboard']
+      interval: 2s
+      timeout: 3s
+      retries: 20
+  migrate:
+    build:
+      context: .
+      target: tools
+    environment:
+      DATABASE_URL: postgres://jobboard:local-development-only@db:5432/jobboard
+    command: npm run db:migrate
+    depends_on:
+      db:
+        condition: service_healthy
+  app:
+    build:
+      context: .
+      args:
+        APP_ORIGIN: http://localhost:${APP_PORT:-4173}
+    ports:
+      - '127.0.0.1:${APP_PORT:-4173}:3000'
+    environment:
+      DATABASE_URL: postgres://jobboard:local-development-only@db:5432/jobboard
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-local-development-secret-change-before-deployment-2026}
+      BETTER_AUTH_URL: http://localhost:${APP_PORT:-4173}
+      PORT: 3000
+      HOST: 0.0.0.0
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:3000/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+volumes:
+  postgres_data:

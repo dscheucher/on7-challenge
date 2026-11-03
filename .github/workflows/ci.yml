@@ -1,0 +1,47 @@
+name: CI
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  check-test-build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: jobboard
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: jobboard_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U jobboard -d jobboard_test"
+          --health-interval 2s --health-timeout 3s --health-retries 20
+    env:
+      DATABASE_URL: postgres://jobboard:ci-only-password@localhost:5432/jobboard_test
+      TEST_DATABASE_URL: postgres://jobboard:ci-only-password@localhost:5432/jobboard_test
+      BETTER_AUTH_SECRET: ci-only-secret-not-for-production-at-least-32-characters
+      BETTER_AUTH_URL: http://localhost:4173
+      PORT: 4173
+      HOST: 127.0.0.1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run check
+      - run: npm run db:migrate
+      - run: npm run test:integration
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e -- --project=desktop --project=mobile
+      - run: docker build --tag on7-challenge:ci .
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-results
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
