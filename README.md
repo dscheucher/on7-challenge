@@ -1,79 +1,58 @@
 # Mini-Jobboard
 
-SvelteKit 3 / Svelte 5, tRPC 11 innerhalb SvelteKit, Better Auth, PostgreSQL 17 und Drizzle ORM. Gemeinsame UI-Komponenten und Design-Tokens übernehmen die Pencil-Vorlage. Manrope wird lokal ausgeliefert.
+**[Live-Demo auf Railway](https://jobboard-production-bd0e.up.railway.app)** · [Repository](https://github.com/dscheucher/on7-challenge) · [Technische Dokumentation](docs/TECHNICAL.md)
 
-## Lokal mit Docker
+Ein kleines Jobboard mit einem öffentlichen Bewerbungsbereich und einem geschützten Recruiter-Bereich. Recruiter verwalten ihre Stellen und Bewerbungen; Bewerber benötigen kein Konto.
+
+## Setup
+
+Voraussetzung: Docker mit Docker Compose.
 
 ```sh
 docker compose up --build -d --wait
-# Optional: Demodaten aus dem Design
+```
+
+Die Anwendung läuft unter [localhost:4173](http://localhost:4173/jobs). PostgreSQL und die Migrationen werden automatisch gestartet. Über „Recruiter-Login → Registrieren“ lässt sich ein eigenes Konto erstellen; anschließend ist man direkt angemeldet. Eine Bestätigung per E-Mail ist nicht erforderlich.
+
+Optional lassen sich Beispieldaten anlegen:
+
+```sh
 docker compose run --rm migrate npm run db:seed
 ```
 
-Öffnen: [localhost:4173/jobs](http://localhost:4173/jobs). Compose wartet auf PostgreSQL, spielt die generierten Migrationen ein und startet danach die Anwendung. `docker compose down` stoppt die Dienste; Daten bleiben im Volume erhalten.
+Weitere Startvarianten, Umgebungsvariablen und Testbefehle stehen in der [technischen Dokumentation](docs/TECHNICAL.md).
 
-Recruiter registrieren sich unter [localhost:4173/register](http://localhost:4173/register), erreichbar über „Registrieren“ auf der Login-Seite. Nach der Registrierung sind sie sofort angemeldet, ohne E-Mail-Verifikation und ohne Mailserver. Name, E-Mail-Adresse und ein Passwort mit 8 bis 128 Zeichen sind erforderlich.
+## Datenmodell
 
-Die optionalen Demo-Konten `lea@beispiel.de` und `tom@beispiel.de` verwenden beide `JobboardDemo2026!`. Seeding überschreibt keine vorhandenen Konten oder Stellen; die Konto-Hilfsfunktion dient ausschließlich Demodaten und Test-Fixtures.
+- **Recruiter:** Benutzer, Zugangsdaten und Sessions werden über Better Auth verwaltet.
+- **Stelle:** Titel, Beschreibung und Status `open` / `closed`; gehört genau einem Recruiter.
+- **Bewerbung:** Name, E-Mail, Nachricht und Status `new` / `invited` / `rejected`; gehört genau einer Stelle. Der zuständige Recruiter ergibt sich über diese Stelle.
 
-Standardports: App 4173, PostgreSQL 55434. Änderungen über `APP_PORT` und `POSTGRES_PORT` in `.env`, danach neu bauen. Die App wird unter `/` betrieben. SvelteKit 3 benötigt die kanonische Origin beim Build: `PUBLIC_ORIGIN` bzw. Docker-Build-Argument `APP_ORIGIN`. Compose setzt sie passend zum App-Port. Für externen Betrieb eine eigene Origin und ein eigenes `BETTER_AUTH_SECRET` konfigurieren; die Compose-Vorgaben dienen ausschließlich lokaler Entwicklung.
+Ein Datenbank-Constraint verhindert mehr als eine Bewerbung pro normalisierter E-Mail-Adresse und Stelle. Beim Bewerben wird die Stelle in einer Transaktion gesperrt und ihr Status geprüft. So werden auch gleichzeitige Bewerbungen beziehungsweise das gleichzeitige Schließen einer Stelle berücksichtigt. Zugriffsrechte werden serverseitig geprüft.
 
-## Native Entwicklung
+## Wichtigste Entscheidungen
 
-Node.js 24 und Docker:
+- **SvelteKit mit integriertem tRPC:** Eine gemeinsame Anwendung für UI und Backend, ohne separaten API-Service. Server-Loads und Form-Actions verwenden denselben typisierten Router.
+- **PostgreSQL und Drizzle:** Explizites Schema, generierte SQL-Migrationen im Repository und Datenbank-Constraints für die zentralen Regeln.
+- **Better Auth:** Authentifizierung und Session-Verwaltung werden nicht selbst implementiert. Die zusätzliche Recruiter-Registrierung erleichtert das Testen der Anwendung, obwohl ursprünglich nur ein Login verlangt war.
+- **Desktop- und Mobile-UI:** Beide Ansichten orientieren sich am Pencil-Design und verwenden gemeinsame Komponenten, Farben, Typografie und Abstände.
+- **Funktionale Tests:** PostgreSQL-Integrationstests und Playwright-Abläufe prüfen die Regeln und UI auf Desktop und Mobile. GitHub Actions führt zusätzlich Lint, Typprüfung und den Docker-Build aus. Visuelle Regressionstests sind nicht Teil des Projekts.
 
-```sh
-cp .env.example .env
-npm ci
-docker compose up -d db
-npm run db:migrate
-npm run db:seed
-npm run dev
-```
+## Was noch offen ist
 
-`npm run build` erzeugt den Node-Server; `PORT=4173 npm run start` startet ihn.
+- Passwort zurücksetzen, einschließlich des dafür nötigen E-Mail-Versands.
+- Kontoeinstellungen, insbesondere E-Mail-Adresse ändern.
+- Account-Verifikation per E-Mail. Sie ist im aktuellen Ablauf bewusst nicht vorgeschrieben.
+- Lokalisierung von Frontend und Validierungsmeldungen: Texte zentralisieren und weitere Sprachen unterstützen.
+- no plain css
 
-## Datenmodell und Backend
+## Wo die AI danebenlag und wie es aufgefallen ist
 
-- Better Auth verwaltet `user`, `account`, `session`, `verification`. Die standardmäßige Verification-Tabelle bleibt Teil des Auth-Schemas; Bestätigungs-E-Mails werden weder benötigt noch versendet.
-- `jobs`: UUID, Eigentümer über `recruiter_id`, Titel, Beschreibung, `open`/`closed`, Zeitstempel.
-- `applications`: UUID, Stelle über `job_id`, Name, E-Mail, Nachricht, `new`/`invited`/`rejected`, Zeitstempel. Kein Bewerberkonto und keine redundante Recruiter-ID.
-- E-Mails werden getrimmt und kleingeschrieben. Unique Constraint `(job_id,email)` und Normalisierungs-Check verhindern Duplikate auch bei parallelen Anfragen.
-- Eine Bewerbung sperrt die Stelle innerhalb einer Transaktion mit `SELECT … FOR UPDATE`. Schließen benötigt dieselbe Zeilensperre. Die Commit-Reihenfolge bestimmt, ob die Bewerbung noch angenommen wird. Nach dem Schließen werden keine neuen Bewerbungen angenommen.
-- Jede geschützte Abfrage und Mutation prüft Eigentümerschaft anhand der Session. Keine vom Client übernommenen Recruiter-IDs. Fremde und fehlende Datensätze ergeben dieselbe 404-Antwort.
-- Zod validiert im tRPC-Router und an der Service-Grenze. PostgreSQL sichert Fremdschlüssel, Enums, Längen und Eindeutigkeit.
-- Stellen sortieren nach letzter Änderung, Bewerbungen nach Eingangszeit, jeweils absteigend.
+Die folgenden Beispiele stammen aus der Umsetzung und können für die persönliche Einordnung angepasst werden:
 
-Der Fetch-Adapter läuft unter `/api/trpc/[...trpc]`. SvelteKit-Loads und Form-Actions verwenden denselben Router über `createCaller` ohne HTTP-Umweg. Form-Actions übersetzen Ergebnisse in Formularzustände und funktionieren auch ohne JavaScript. `src/lib/trpc.ts` stellt zusätzlich den typisierten HTTP-Client bereit. Better Auth verwendet seine eigenen `/api/auth/*`-Endpunkte.
+- **Formulare liefen zunächst lokal nicht im Produktions-Build:** SvelteKit nahm ohne explizite Origin-Konfiguration HTTPS an, während die lokale Anwendung HTTP verwendete. Die Formularanfragen wurden dadurch mit 403 abgewiesen. Aufgefallen ist das durch die fehlgeschlagenen Browser-Tests für Login und Bewerbung. Behoben wurde die tatsächliche Origin-Konfiguration; die Schutzprüfung blieb aktiv.
+- **Die Formatierung der Stellenbeschreibung war zu implizit:** Die erste Zeile jedes mehrzeiligen Absatzes wurde automatisch als Überschrift interpretiert. Das fiel bei der Frage auf, warum gerade die „Frontend Developer“-Anzeige anders aussah. Jetzt werden nur explizite `## Überschriften` formatiert; normale Zeilenumbrüche bleiben Text. Ein Browser-Test prüft das unabhängig vom Stellentitel.
 
-Stellenbeschreibungen verwenden Leerzeilen für Absätze. Optionale Überschriften werden explizit mit `## ` am Zeilenanfang markiert. Normale Zeilenumbrüche erzeugen keine Überschrift; dieselbe Darstellung gilt unabhängig vom Stellentitel. HTML wird als Text ausgegeben.
+## Deployment
 
-## Migrationen
-
-```sh
-npm run db:generate  # drizzle-kit erzeugt SQL und Snapshot
-npm run db:migrate  # generierte Migrationen anwenden
-```
-
-SQL und Metadaten liegen unter `drizzle/` im Repository. Kein `drizzle-kit push` beim Start. Schemaänderungen werden im Drizzle-Schema umgesetzt und anschließend als neue Migration generiert.
-
-## Tests und CI
-
-```sh
-npm run lint
-npm run check
-# Einmalig eigene Testdatenbank erstellen:
-docker compose exec db createdb -U jobboard jobboard_test
-DATABASE_URL=postgres://jobboard:local-development-only@localhost:55434/jobboard_test npm run db:migrate
-TEST_DATABASE_URL=postgres://jobboard:local-development-only@localhost:55434/jobboard_test npm run test:integration
-npx playwright install chromium
-npm run test:e2e -- --project=desktop --project=mobile
-```
-
-Tests erzeugen eigene Recruiter und entfernen nur deren Datensätze. Browser-Tests starten bei Bedarf den gebauten Server. [Interaktionskatalog](docs/playwright-interactions.md).
-
-[GitHub Actions](.github/workflows/ci.yml) läuft bei jedem Push und Pull Request: Lint, Typprüfung, Migrationen, echte PostgreSQL-Integrationstests, Desktop-/Mobile-Browsertests und Docker-Image-Build. Fehlerberichte und Traces werden als Artefakte gespeichert.
-
-## Pencil-Design
-
-Tokens: `src/lib/styles/tokens.css`. Wiederverwendbare Komponenten: `src/lib/components/`. [Originale Designreferenzen](docs/design/README.md). Die Umsetzung wird manuell mit Pencil abgeglichen; es gibt keine visuellen Regressionstests.
+Die Anwendung wird auf Railway mit einer getrennten PostgreSQL-Instanz betrieben. Die Infrastrukturkonfiguration steht in [`.railway/railway.ts`](.railway/railway.ts); Details zu GitHub-Anbindung und Migrationen stehen in der [technischen Dokumentation](docs/TECHNICAL.md#railway). Die Live-URL steht oben.

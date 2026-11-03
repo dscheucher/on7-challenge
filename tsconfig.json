@@ -5,6 +5,7 @@
 		"types": ["$app/types", "node"]
 	},
 	"include": [
+		".railway",
 		"src",
 		"vite.config.ts",
 		"prettier.config.js",

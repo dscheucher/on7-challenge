@@ -1,0 +1,12 @@
+.git
+.env
+.env.*
+!.env.example
+node_modules
+.svelte-kit
+build
+test-results
+playwright-report
+design.pen
+docs/design/reference
+.vscode
